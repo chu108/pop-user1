@@ -21,8 +21,10 @@ impl Default for UserOne {
 #[near_bindgen]
 impl UserOne {
     //添加消息
-    pub fn one_add(&mut self, key:String, message: String) {
-        let tmp = env::signer_account_id().to_string()+"-"+&message;
+    pub fn one_add(&mut self, key: String, message: String) {
+        let sig_act_id = env::signer_account_id().to_string();
+        let cur_act_id = env::signer_account_id().to_string();
+        let tmp = format!("signer_account_id:{}_current_account_id:{}_mess:{}", sig_act_id, cur_act_id, message);
         self.one_map.insert(&key, &tmp);
     }
     //获取消息
@@ -37,7 +39,9 @@ impl UserOne {
         }
         return list_map;
     }
+
 }
+
 
 #[cfg(test)]
 mod tests {
@@ -84,7 +88,11 @@ mod tests {
         testing_env!(context);
         let one: UserOne = UserOne::default();
         let mess = one.one_get(env::signer_account_id());
-        println!("获取account_id：{}, mess: {:?}", env::signer_account_id(), mess); 
+        println!(
+            "获取account_id：{}, mess: {:?}",
+            env::signer_account_id(),
+            mess
+        );
     }
 
     #[test]
@@ -96,7 +104,6 @@ mod tests {
         one.one_add("张三".to_string(), "111111".to_string());
         one.one_add("李四".to_string(), "222222".to_string());
         one.one_add("王五".to_string(), "33333333".to_string());
-    
 
         for (k, v) in one.one_map.iter() {
             println!("key:{}, val:{}", k, v);
