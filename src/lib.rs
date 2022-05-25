@@ -24,7 +24,7 @@ impl UserOne {
     pub fn one_add(&mut self, key: String, message: String) {
         let sig_act_id = env::signer_account_id().to_string();
         let cur_act_id = env::signer_account_id().to_string();
-        let tmp = format!("signer_account_id:{}_current_account_id:{}_mess:{}", sig_act_id, cur_act_id, message);
+        let tmp = format!("signer_account_id:{};_current_account_id:{};_mess:{}", sig_act_id, cur_act_id, message);
         self.one_map.insert(&key, &tmp);
     }
     //获取消息
